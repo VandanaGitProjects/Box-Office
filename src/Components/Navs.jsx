@@ -19,11 +19,12 @@ const Navs = () => {
     <div>
       <ul>
         {LINKS.map((item) => (
-          <li>
+          <li key={item.to}>
             <Link to={item.to}>{item.text}</Link>
           </li>
         ))}
       </ul>
+      
     </div>
   );
 };
