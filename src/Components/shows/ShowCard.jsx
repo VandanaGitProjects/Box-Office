@@ -3,6 +3,7 @@ const ShowCard = ({ name, image, id, summary }) => {
   const summaryStripped = summary
     ? summary.split('').slice(0, 10).join('').replace(/<.+?>/g, '')
     : 'No Description';
+    
   return (
     <div>
       <div>
@@ -11,7 +12,7 @@ const ShowCard = ({ name, image, id, summary }) => {
       <h1>{name}</h1>
       <p>{summaryStripped}</p>
       <div>
-        <Link to="/">Read More</Link>
+        <Link to={`/Show/${id}`}>Read More</Link>
         <button type="button">Star me</button>
       </div>
     </div>
