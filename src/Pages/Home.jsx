@@ -1,27 +1,25 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import SearchForm from '../Components/SearchForm';
 import { searchForShow, searchForPeople } from '../Api/tvmaze';
 import ShowsGrid from '../Components/shows/ShowsGrid';
 import ActorsGrid from '../Components/actors/ActorsGrid';
 
 const Home = () => {
-  const [apiData, setApiData] = useState(null);
-  const [apiDataError, setApiDataError] = useState(null);
+  const [filter, setFilter] = useState(null);
 
-  const onSearch = async options => {
-    try {
-      setApiDataError(null);
-      if (options.searchOption === 'shows') {
-        const result = await searchForShow(options.q);
+  const { data: apiData, error: apiDataError } = useQuery({
+    queryKey: ['search', filter],
+    queryFn: () =>
+      filter.searchOption === 'shows'
+        ? searchForShow(filter.q)
+        : searchForPeople(filter.q),
+    enabled: !!filter,
+    refetchOnWindowFocus: false,
+  });
 
-        setApiData(result);
-      } else {
-        const result = await searchForPeople(options.q);
-        setApiData(result);
-      }
-    } catch (error) {
-      setApiDataError(error);
-    }
+  const onSearch = async ({ q, searchOption }) => {
+    setFilter({ q, searchOption });
   };
 
   const renderApiData = () => {
@@ -31,9 +29,6 @@ const Home = () => {
 
     if (apiData?.length === 0) {
       return <div>No Result Found</div>;
-    }
-
-    try {
       if (apiData) {
         return apiData[0].show ? (
           <ShowsGrid shows={apiData} />
