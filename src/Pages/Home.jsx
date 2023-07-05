@@ -27,17 +27,13 @@ const Home = () => {
       return <div>Error Occured : {apiDataError.message}</div>;
     }
 
-    if (apiData?.length === 0) {
-      return <div>No Result Found</div>;
-      if (apiData) {
-        return apiData[0].show ? (
-          <ShowsGrid shows={apiData} />
-        ) : (
-          <ActorsGrid actors={apiData} />
-        );
-      }
-    } catch (error) {
-      return <div>Result Not Found or Empty Data</div>;
+    if (apiData?.length === 0) return <div>No Result Found</div>;
+    if (apiData) {
+      return apiData[0].show ? (
+        <ShowsGrid shows={apiData} />
+      ) : (
+        <ActorsGrid actors={apiData} />
+      );
     }
 
     return null;
