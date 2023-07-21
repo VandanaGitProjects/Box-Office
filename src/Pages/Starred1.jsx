@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import { useStarredShows } from '../lib/useStarredShows';
+
+// import React, { useState } from 'react';
 const Starred1 = () => {
-  const [formData, setFormData] = useState({
+  const [starredShows] = useStarredShows();
+  /*  const [formData, setFormData] = useState({
     firstName: 'Krisha',
     lastName: 'Bhavsar',
     email: '',
@@ -26,9 +29,9 @@ const Starred1 = () => {
       email: '',
     });
   };
-
+ */
   return (
-    <form onSubmit={handleSubmit}>
+    /*  <form onSubmit={handleSubmit}>
       <label>
         First Name:
         <input
@@ -57,7 +60,8 @@ const Starred1 = () => {
         />
       </label>
       <button type="submit">Submit</button>
-    </form>
+    </form>  */
+    <div>Starred Show , starred {starredShows.length}</div>
   );
 };
 

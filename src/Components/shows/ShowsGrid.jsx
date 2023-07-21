@@ -1,38 +1,7 @@
-import { useReducer, useEffect } from 'react';
 import ShowCard from './ShowCard';
-
-const usePersistedReducer = (reducer, intialState, localStorageKey) => {
-  const [state, dispatch] = useReducer(reducer, intialState, initial => {
-    const persisedValue = localStorage.getItem(localStorageKey);
-
-    return persisedValue ? JSON.parse(persisedValue) : initial;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(state));
-  }, [state, localStorageKey]);
-
-  return [state, dispatch];
-};
-//usereducer
-const starredShowReducer = (currentStarred, action) => {
-  switch (action.type) {
-    case 'STAR':
-      return currentStarred.concat(action.showId);
-    case 'UNSTAR':
-      return currentStarred.filter(showId => showId !== action.showId);
-    default:
-      return currentStarred;
-  }
-};
-
+import { useStarredShows } from '../../lib/useStarredShows';
 const ShowsGrid = ({ shows }) => {
-  const [starredShows, dispatchStarred] = usePersistedReducer(
-    starredShowReducer,
-    [],
-    'starredShows'
-  );
-
+  const [starredShows, dispatchStarred] = useStarredShows();
   const onStarMeClick = showId => {
     const isStarred = starredShows.includes(showId);
     if (isStarred) {
@@ -54,6 +23,7 @@ const ShowsGrid = ({ shows }) => {
           }
           summary={data.show.summary}
           onStarMeClick={onStarMeClick}
+          isStarred={starredShows.includes(data.show.id)}
         />
       ))}
     </div>
