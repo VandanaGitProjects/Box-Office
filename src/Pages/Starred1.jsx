@@ -1,68 +1,33 @@
+import { useQuery } from '@tanstack/react-query';
 import { useStarredShows } from '../lib/useStarredShows';
+import ShowsGrid from '../Components/shows/ShowsGrid';
 
-// import React, { useState } from 'react';
+import { getShowByIds } from '../Api/tvmaze';
+
 const Starred1 = () => {
-  const [starredShows] = useStarredShows();
-  /*  const [formData, setFormData] = useState({
-    firstName: 'Krisha',
-    lastName: 'Bhavsar',
-    email: '',
+  const [starredShowsIds] = useStarredShows();
+
+  const { data: starredShows, error: starredShowsError } = useQuery({
+    queryKey: ['starred', starredShowsIds],
+    queryFn: () =>
+      getShowByIds(starredShowsIds).then(result =>
+        result.map(show => ({ show }))
+      ),
+    refetchOnWindowFocus: false,
   });
 
-  const handleChange = e => {
-    setFormData(prevData => ({
-      ...prevData,
+  if (starredShows?.length === 0) {
+    return <div>No Show were starred</div>;
+  }
+  if (starredShows?.length > 0) {
+    return <ShowsGrid shows={starredShows} />;
+  }
 
-      [e.target.name]: e.target.value,
-    }));
-    console.log(e.target.name);
-    console.log(e.target.value);
-  };
+  if (starredShowsError) {
+    return <div>Error Occured: {starredShowsError.message}</div>;
+  }
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    console.log(formData);
-    // Reset form data
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-    });
-  };
- */
-  return (
-    /*  <form onSubmit={handleSubmit}>
-      <label>
-        First Name:
-        <input
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Last Name:
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Email:
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-      </label>
-      <button type="submit">Submit</button>
-    </form>  */
-    <div>Starred Show , starred {starredShows.length}</div>
-  );
+  return <div>shows are loding....</div>;
 };
 
 export default Starred1;
